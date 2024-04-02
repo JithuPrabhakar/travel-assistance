@@ -9,4 +9,9 @@ input[type='email'] {
 }
 
 button {
+  @apply bg-gray-300;
+}
+button.primary {
+  background-color: #4b1a9e;
+  @apply bg-primary p-2 w-full text-white rounded-2xl;
 }
