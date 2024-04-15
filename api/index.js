@@ -4,6 +4,7 @@ const app = express()
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const cookieParser = require('cookie-parser')
 
 require('dotenv').config()
 
@@ -13,11 +14,11 @@ const bcryptSalt = bcrypt.genSaltSync(10)
 const jwtSecret = '12345'
 
 app.use(express.json())
-
+app.use(cookieParser())
 app.use(
   cors({
     credentials: true,
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5174',
   })
 )
 
@@ -62,6 +63,24 @@ app.post('/login', async (req, res) => {
   } else {
     res.json('user not found')
   }
+})
+
+app.get('/profile', (req, res) => {
+  const { token } = req.cookies
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err
+      console.log(userData)
+      const { name, email, _id } = await User.findById(userData.id)
+      res.json({ name, email, _id })
+    })
+  } else {
+    res.json({ token })
+  }
+})
+
+app.post('/logout', (req, res) => {
+  res.cookie('token', '').json(true)
 })
 
 app.listen(8080)

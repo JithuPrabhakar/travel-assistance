@@ -3,14 +3,17 @@ import { CiSearch } from 'react-icons/ci'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { FaUserCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { UserContext } from '../UserContext'
 
 export const Header = () => {
+  const { user } = useContext(UserContext)
   return (
     <header className='flex justify-between'>
-      <a href='' className='flex items-center gap-1'>
+      <Link to='/' className='flex items-center gap-1'>
         <FaPlaneDeparture className='w-8 h-8 text-primary' />
         <span className='font-bold text-xl text-primary'>Travel Assistant</span>
-      </a>
+      </Link>
 
       <div className='flex items-center border-gray-300 rounded-full gap-2 py-2 px-4 shadow-md shadow-gray-300'>
         <div>Anywhere</div>
@@ -25,13 +28,14 @@ export const Header = () => {
       </div>
 
       <Link
-        to={'/login'}
+        to={user ? '/account' : '/login'}
         className='flex items-center border-gray-300 rounded-full gap-2 py-2 px-4 shadow-md shadow-gray-300'
       >
         <RxHamburgerMenu className='text-primary w-5 h-5' />
         <div className=''>
           <FaUserCircle className='text-primary w-5 h-5' />
         </div>
+        {!!user && <div>{user.name}</div>}
       </Link>
     </header>
   )
