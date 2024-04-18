@@ -18,7 +18,9 @@ export const LoginPage = () => {
         { email, password },
         { withCredentials: true }
       )
+      localStorage.setItem('user', JSON.stringify(data))
       setUser(data)
+      console.log(data)
       alert('Login successful')
 
       setRedirect(true)

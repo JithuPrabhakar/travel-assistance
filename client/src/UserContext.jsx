@@ -10,10 +10,16 @@ export function UserContextProvider({ children }) {
 
   useEffect(() => {
     if (!user) {
-      axios.get('/profile').then(({ data }) => {
-        setUser(data)
-        setReady(true)
-      })
+      axios
+        .get('/profile')
+        .then(({ data }) => {
+          console.log(data)
+          setUser(data)
+          setReady(true)
+        })
+        .catch((error) => {
+          console.log('Error fetching data: ', error)
+        })
     }
   }, [user])
 

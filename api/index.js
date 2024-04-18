@@ -5,6 +5,7 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const cookieParser = require('cookie-parser')
+const download = require('image-downloader')
 
 require('dotenv').config()
 
@@ -15,10 +16,11 @@ const jwtSecret = '12345'
 
 app.use(express.json())
 app.use(cookieParser())
+app.use('/uploads', express.static(__dirname + '/uploads'))
 app.use(
   cors({
     credentials: true,
-    origin: 'http://localhost:5174',
+    origin: 'http://localhost:5173',
   })
 )
 
@@ -69,7 +71,10 @@ app.get('/profile', (req, res) => {
   const { token } = req.cookies
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-      if (err) throw err
+      if (err) {
+        console.log('error')
+        throw err
+      }
       console.log(userData)
       const { name, email, _id } = await User.findById(userData.id)
       res.json({ name, email, _id })
@@ -81,6 +86,21 @@ app.get('/profile', (req, res) => {
 
 app.post('/logout', (req, res) => {
   res.cookie('token', '').json(true)
+})
+
+app.post('/upload-by-link', async (req, res) => {
+  const { link } = req.body
+  const newName = 'photo' + Date.now() + '.jpg'
+  await download.image({
+    url: link,
+    dest: __dirname + '/uploads/' + newName,
+  })
+  // const url = await uploadToS3(
+  //   '/tmp/' + newName,
+  //   newName,
+  //   mime.lookup('/tmp/' + newName)
+  // )
+  res.json(newName)
 })
 
 app.listen(8080)
