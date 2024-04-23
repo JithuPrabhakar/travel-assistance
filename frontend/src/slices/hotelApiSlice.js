@@ -17,7 +17,7 @@ export const hotelApiSlice = apiSlice.injectEndpoints({
       }),
       config: {
         headers: {
-          'Content-Type': 'multipart/form-data;  boundary=boundary-string',
+          'Content-type': 'multipart/form-data;  boundary=boundary-string',
         },
       },
     }),

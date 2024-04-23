@@ -64,10 +64,9 @@ const PlacesPage = () => {
     for (let i = 0; i < files.length; i++) {
       data.append('photos', files[i])
     }
-    const { data: filename } = await uploadPhotos(data)
-    console.log(...filename)
+    const { data: filenames } = await uploadPhotos(data)
     setAddedPhotos((prev) => {
-      return [...prev, filename]
+      return [...prev, ...filenames]
     })
     console.log(addedPhotos)
   }
@@ -122,9 +121,9 @@ const PlacesPage = () => {
             <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-2'>
               {addedPhotos.length > 0 &&
                 addedPhotos.map((link, index) => (
-                  <div key={index}>
+                  <div className='h-32 flex' key={index}>
                     <img
-                      className='rounded-2xl'
+                      className='rounded-2xl w-full'
                       src={'http://localhost:8000/uploads/' + link}
                       alt='preview'
                       width='150px'
