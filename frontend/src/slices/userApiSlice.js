@@ -9,13 +9,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    uploadImage: builder.mutation({
-      query: (data) => ({
-        url: '/upload-by-link',
-        method: 'POST',
-        body: data,
-      }),
-    }),
     login: builder.mutation({
       query: (data) => ({
         url: '/api/users/auth',
@@ -32,9 +25,5 @@ export const userApiSlice = apiSlice.injectEndpoints({
   }),
 })
 
-export const {
-  useRegisterMutation,
-  useLoginMutation,
-  useLogoutMutation,
-  useUploadImageMutation,
-} = userApiSlice
+export const { useRegisterMutation, useLoginMutation, useLogoutMutation } =
+  userApiSlice

@@ -4,7 +4,7 @@ export const hotelApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     uploadImage: builder.mutation({
       query: (data) => ({
-        url: '/upload-by-link',
+        url: '/api/upload-by-link',
         method: 'POST',
         body: data,
       }),

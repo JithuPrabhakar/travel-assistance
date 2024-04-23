@@ -43,7 +43,7 @@ app.post('/suhail', (req, res) => {
 
 app.use('/api/users', userRoutes)
 
-app.post('/upload-by-link', async (req, res) => {
+app.post('/api/upload-by-link', async (req, res) => {
   // Fix the route path
   console.log('ss')
   const { link } = req.body

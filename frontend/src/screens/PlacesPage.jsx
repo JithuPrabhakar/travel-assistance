@@ -3,7 +3,7 @@ import { FaPlus, FaUpload } from 'react-icons/fa6'
 import Perks from '../components/Perks'
 import { useState } from 'react'
 import axios from 'axios'
-import { useUploadImageMutation } from '../slices/userApiSlice'
+import { useUploadImageMutation } from '../slices/hotelApiSlice'
 
 const PlacesPage = () => {
   const { action } = useParams()
@@ -44,7 +44,7 @@ const PlacesPage = () => {
     // })
     console.log('ss')
     await uploadImage({
-      link: 'https://img.freepik.com/free-photo/beautiful-view-sunset-sea_23-2148019892.jpg?t=st=1713851196~exp=1713854796~hmac=45163f2bcb7853f834b5513c0d7a3fec438f74f2b4d8969183a0e35065c1fc75&w=1380',
+      link: photoLink,
     })
   }
 
