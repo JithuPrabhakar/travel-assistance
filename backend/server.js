@@ -2,11 +2,13 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import { fileURLToPath } from 'url' // Import fileURLToPath
-import { dirname, join } from 'path' // Import dirname and join
+import path, { dirname, join } from 'path' // Import dirname and join
 import connectDB from './config/db.js'
 import userRoutes from './routes/userRoutes.js'
 import { errorHandler, notFound } from './middleware/errorHandler.js'
 import imageDownloader from 'image-downloader'
+import multer from 'multer'
+import fs from 'fs'
 // import cors from 'cors'
 
 dotenv.config()
@@ -44,18 +46,34 @@ app.post('/suhail', (req, res) => {
 app.use('/api/users', userRoutes)
 
 app.post('/api/upload-by-link', async (req, res) => {
-  // Fix the route path
   console.log('ss')
   const { link } = req.body
 
   const newName = 'photo' + Date.now() + '.jpg'
-  console.log(newName)
   await imageDownloader.image({
     url: link,
-    dest: join(__dirname, 'uploads', newName), // Use join to construct path
+    dest: join(__dirname, 'uploads', newName),
   })
-  res.json(join('/uploads', newName)) // Construct URL correctly
+  res.json(newName)
 })
+
+const photosMiddleware = multer({ dest: 'uploads/' })
+app.post(
+  '/api/upload',
+  photosMiddleware.array('photos', 100),
+  async (req, res) => {
+    const uploadedFiles = []
+    for (let i = 0; i < req.files.length; i++) {
+      const { path, originalname } = req.files[i]
+      const parts = originalname.split('.')
+      const ext = parts[parts.length - 1]
+      const newPath = path.replace(/\\/g, '/') + '.' + ext
+      fs.renameSync(path, newPath)
+      uploadedFiles.push(newPath.replace('uploads/', ''))
+    }
+    res.json(uploadedFiles)
+  }
+)
 
 app.use(notFound)
 app.use(errorHandler)

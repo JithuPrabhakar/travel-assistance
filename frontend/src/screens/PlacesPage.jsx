@@ -3,7 +3,10 @@ import { FaPlus, FaUpload } from 'react-icons/fa6'
 import Perks from '../components/Perks'
 import { useState } from 'react'
 import axios from 'axios'
-import { useUploadImageMutation } from '../slices/hotelApiSlice'
+import {
+  useUploadImageMutation,
+  useUploadPhotosMutation,
+} from '../slices/hotelApiSlice'
 
 const PlacesPage = () => {
   const { action } = useParams()
@@ -21,6 +24,7 @@ const PlacesPage = () => {
   const [photoLink, setPhotoLink] = useState('')
 
   const [uploadImage] = useUploadImageMutation()
+  const [uploadPhotos] = useUploadPhotosMutation()
 
   function inputHeader(text) {
     return <h2 className='text-2xl mt-4'>{text}</h2>
@@ -39,13 +43,33 @@ const PlacesPage = () => {
 
   async function addPhotoByLink(e) {
     e.preventDefault()
-    // await axios.post('http://localhost:8000/upload-by-link', {
-    //   link: photoLink,
-    // })
-    console.log('ss')
-    await uploadImage({
-      link: photoLink,
+    try {
+      const res = await uploadImage({
+        link: photoLink,
+      }).unwrap()
+      setAddedPhotos((prev) => {
+        return [...prev, res]
+      })
+      setPhotoLink('')
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function uploadPhoto(e) {
+    e.preventDefault()
+    const files = e.target.files
+    console.log(files)
+    const data = new FormData()
+    for (let i = 0; i < files.length; i++) {
+      data.append('photos', files[i])
+    }
+    const { data: filename } = await uploadPhotos(data)
+    console.log(...filename)
+    setAddedPhotos((prev) => {
+      return [...prev, filename]
     })
+    console.log(addedPhotos)
   }
 
   return (
@@ -97,10 +121,11 @@ const PlacesPage = () => {
             </div>
             <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-2'>
               {addedPhotos.length > 0 &&
-                addedPhotos.map((link) => (
-                  <div key={link}>
+                addedPhotos.map((link, index) => (
+                  <div key={index}>
                     <img
-                      src={'/uploads/' + link}
+                      className='rounded-2xl'
+                      src={'http://localhost:8000/uploads/' + link}
                       alt='preview'
                       width='150px'
                       height='150px'
@@ -109,10 +134,16 @@ const PlacesPage = () => {
                 ))}
             </div>
             <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-2'>
-              <button className='flex justify-center gap-1 border bg-transparent rounded-2xl p-8 text-2xl text-gray-600'>
+              <label className='cursor-pointer flex justify-center gap-1 border bg-transparent rounded-2xl p-2 text-2xl text-gray-600'>
+                <input
+                  type='file'
+                  multiple
+                  className='hidden'
+                  onChange={uploadPhoto}
+                />
                 <FaUpload className='w-8 h-8' />
                 Upload
-              </button>
+              </label>
             </div>
             {preInput('Description', 'description of the place')}
             <textarea

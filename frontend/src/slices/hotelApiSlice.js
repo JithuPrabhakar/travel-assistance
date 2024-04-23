@@ -9,7 +9,19 @@ export const hotelApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    uploadPhotos: builder.mutation({
+      query: (data) => ({
+        url: '/api/upload',
+        method: 'POST',
+        body: data,
+      }),
+      config: {
+        headers: {
+          'Content-Type': 'multipart/form-data;  boundary=boundary-string',
+        },
+      },
+    }),
   }),
 })
 
-export const { useUploadImageMutation } = hotelApiSlice
+export const { useUploadImageMutation, useUploadPhotosMutation } = hotelApiSlice
