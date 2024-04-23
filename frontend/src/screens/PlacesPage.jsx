@@ -3,6 +3,7 @@ import { FaPlus, FaUpload } from 'react-icons/fa6'
 import Perks from '../components/Perks'
 import { useState } from 'react'
 import axios from 'axios'
+import { useUploadImageMutation } from '../slices/userApiSlice'
 
 const PlacesPage = () => {
   const { action } = useParams()
@@ -18,6 +19,8 @@ const PlacesPage = () => {
   const [price, setPrice] = useState(100)
   const [redirect, setRedirect] = useState(false)
   const [photoLink, setPhotoLink] = useState('')
+
+  const [uploadImage] = useUploadImageMutation()
 
   function inputHeader(text) {
     return <h2 className='text-2xl mt-4'>{text}</h2>
@@ -36,7 +39,13 @@ const PlacesPage = () => {
 
   async function addPhotoByLink(e) {
     e.preventDefault()
-    await axios.post('/upload-by-link', { link: photoLink })
+    // await axios.post('http://localhost:8000/upload-by-link', {
+    //   link: photoLink,
+    // })
+    console.log('ss')
+    await uploadImage({
+      link: 'https://img.freepik.com/free-photo/beautiful-view-sunset-sea_23-2148019892.jpg?t=st=1713851196~exp=1713854796~hmac=45163f2bcb7853f834b5513c0d7a3fec438f74f2b4d8969183a0e35065c1fc75&w=1380',
+    })
   }
 
   return (
@@ -85,6 +94,19 @@ const PlacesPage = () => {
               >
                 Add&nbsp;photo
               </button>
+            </div>
+            <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-2'>
+              {addedPhotos.length > 0 &&
+                addedPhotos.map((link) => (
+                  <div key={link}>
+                    <img
+                      src={'/uploads/' + link}
+                      alt='preview'
+                      width='150px'
+                      height='150px'
+                    />
+                  </div>
+                ))}
             </div>
             <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-2'>
               <button className='flex justify-center gap-1 border bg-transparent rounded-2xl p-8 text-2xl text-gray-600'>
