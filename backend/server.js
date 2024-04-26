@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url' // Import fileURLToPath
 import path, { dirname, join } from 'path' // Import dirname and join
 import connectDB from './config/db.js'
 import userRoutes from './routes/userRoutes.js'
+import placeRoutes from './routes/placeRoutes.js'
 import { errorHandler, notFound } from './middleware/errorHandler.js'
 import imageDownloader from 'image-downloader'
 import multer from 'multer'
@@ -40,6 +41,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/users', userRoutes)
+app.use('/api/places', placeRoutes)
 
 app.post('/api/upload-by-link', async (req, res) => {
   const { link } = req.body

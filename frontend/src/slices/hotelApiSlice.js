@@ -21,7 +21,24 @@ export const hotelApiSlice = apiSlice.injectEndpoints({
         },
       },
     }),
+    saveHotel: builder.mutation({
+      query: (data) => ({
+        url: `/api/places`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getHotels: builder.query({
+      query: (id) => ({
+        url: `/api/places?id=${id}`,
+      }),
+    }),
   }),
 })
 
-export const { useUploadImageMutation, useUploadPhotosMutation } = hotelApiSlice
+export const {
+  useUploadImageMutation,
+  useUploadPhotosMutation,
+  useSaveHotelMutation,
+  useGetHotelsQuery,
+} = hotelApiSlice

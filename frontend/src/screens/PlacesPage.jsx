@@ -1,9 +1,11 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { FaPlus, FaUpload } from 'react-icons/fa6'
 import Perks from '../components/Perks'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {
+  useGetHotelsQuery,
+  useSaveHotelMutation,
   useUploadImageMutation,
   useUploadPhotosMutation,
 } from '../slices/hotelApiSlice'
@@ -22,9 +24,21 @@ const PlacesPage = () => {
   const [price, setPrice] = useState(100)
   const [redirect, setRedirect] = useState(false)
   const [photoLink, setPhotoLink] = useState('')
+  const [places, setPlaces] = useState([])
 
   const [uploadImage] = useUploadImageMutation()
   const [uploadPhotos] = useUploadPhotosMutation()
+  const [saveHotel] = useSaveHotelMutation()
+
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+  const { data, isLoading, error } = useGetHotelsQuery(userInfo._id)
+  console.log({ data, isLoading, error })
+
+  // useEffect(() => {
+  //   const response = getHotels(userInfo._id)
+  //   setPlaces(response)
+  // }, [])
 
   function inputHeader(text) {
     return <h2 className='text-2xl mt-4'>{text}</h2>
@@ -71,6 +85,29 @@ const PlacesPage = () => {
     console.log(addedPhotos)
   }
 
+  async function addNewPlace(e) {
+    e.preventDefault()
+    const data = {
+      title,
+      address,
+      addedPhotos,
+      description,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+      owner: userInfo._id,
+    }
+    const response = await saveHotel(data)
+    console.log(response)
+    setRedirect('/account/places')
+  }
+
+  if (redirect) {
+    return <Navigate to={redirect} />
+  }
+
   return (
     <div>
       {action !== 'new' ? (
@@ -85,7 +122,7 @@ const PlacesPage = () => {
         </div>
       ) : (
         <div>
-          <form>
+          <form onSubmit={addNewPlace}>
             {preInput(
               'Title',
               'Title for your place. should be short and catchy as in advertisement'
