@@ -4,6 +4,7 @@ import Perks from '../components/Perks'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {
+  useGetHotelByIdQuery,
   useGetHotelsQuery,
   useSaveHotelMutation,
   useUploadImageMutation,
@@ -12,6 +13,7 @@ import {
 
 const PlacesPage = () => {
   const { action } = useParams()
+  console.log(action)
   const [title, setTitle] = useState('')
   const [address, setAddress] = useState('')
   const [addedPhotos, setAddedPhotos] = useState([])
@@ -24,7 +26,6 @@ const PlacesPage = () => {
   const [price, setPrice] = useState(100)
   const [redirect, setRedirect] = useState(false)
   const [photoLink, setPhotoLink] = useState('')
-  const [places, setPlaces] = useState([])
 
   const [uploadImage] = useUploadImageMutation()
   const [uploadPhotos] = useUploadPhotosMutation()
@@ -32,13 +33,7 @@ const PlacesPage = () => {
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
-  const { data, isLoading, error } = useGetHotelsQuery(userInfo._id)
-  console.log({ data, isLoading, error })
-
-  // useEffect(() => {
-  //   const response = getHotels(userInfo._id)
-  //   setPlaces(response)
-  // }, [])
+  // const { data, isLoading } = useGetHotelsQuery(userInfo._id)
 
   function inputHeader(text) {
     return <h2 className='text-2xl mt-4'>{text}</h2>
@@ -119,6 +114,31 @@ const PlacesPage = () => {
             <FaPlus />
             Add new place
           </Link>
+          {/*<div>
+            {isLoading && <div>Loading...</div>}
+            {!isLoading &&
+              data.length > 0 &&
+              data.map((place) => (
+                <Link
+                  to={'/account/places/' + place._id}
+                  key={place._id}
+                  className='flex gap-4 bg-gray-100 p-4 rounded-2xl cursor-pointer'
+                >
+                  <div className='w-32 h-32 bg-gray-300 grow shrink-0'>
+                    {place.photos.length && (
+                      <img
+                        src={'http://localhost:8000/uploads/' + place.photos[0]}
+                        alt=''
+                      />
+                    )}
+                  </div>
+                  <div className='grow-0 shrink'>
+                    <h2 className='text-xl'>{place.title}</h2>
+                    <p className='text-sm mt-2'>{place.description}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>*/}
         </div>
       ) : (
         <div>

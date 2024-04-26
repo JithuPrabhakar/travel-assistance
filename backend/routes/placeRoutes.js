@@ -5,7 +5,7 @@ import { protect } from '../middleware/authMiddleware.js' // Import your authent
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-  const id = req.params
+  const id = req.query.id
   try {
     const places = await Place.find({ owner: id })
     res.status(200).json(places)
@@ -14,6 +14,11 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: err.message })
   }
 })
+
+// router.get('/:id', async (req, res) => {
+//   const { id } = req.params
+//   res.json(await Place.findById(id))
+// })
 
 router.post('/', protect, async (req, res) => {
   try {
@@ -32,7 +37,7 @@ router.post('/', protect, async (req, res) => {
     const place = await Place.create({
       title,
       address,
-      addedPhotos,
+      photos: addedPhotos,
       description,
       perks,
       extraInfo,
