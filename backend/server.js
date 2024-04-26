@@ -39,14 +39,9 @@ app.get('/', (req, res) => {
   res.send('API IS RUNNING')
 })
 
-app.post('/suhail', (req, res) => {
-  res.send('suh')
-})
-
 app.use('/api/users', userRoutes)
 
 app.post('/api/upload-by-link', async (req, res) => {
-  console.log('ss')
   const { link } = req.body
 
   const newName = 'photo' + Date.now() + '.jpg'
@@ -57,7 +52,7 @@ app.post('/api/upload-by-link', async (req, res) => {
   res.json(newName)
 })
 
-const photosMiddleware = multer({ dest: 'uploads/' })
+const photosMiddleware = multer({ dest: 'backend/uploads/' })
 app.post(
   '/api/upload',
   photosMiddleware.array('photos', 100),
@@ -69,7 +64,7 @@ app.post(
       const ext = parts[parts.length - 1]
       const newPath = path.replace(/\\/g, '/') + '.' + ext
       fs.renameSync(path, newPath)
-      uploadedFiles.push(newPath.replace('uploads/', ''))
+      uploadedFiles.push(newPath.replace('backend/uploads/', ''))
     }
     res.json(uploadedFiles)
   }

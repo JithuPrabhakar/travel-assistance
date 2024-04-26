@@ -34,10 +34,10 @@ const PlacesPage = () => {
   }
   function preInput(header, description) {
     return (
-      <>
+      <div>
         {inputHeader(header)}
         {inputDescription(description)}
-      </>
+      </div>
     )
   }
 
