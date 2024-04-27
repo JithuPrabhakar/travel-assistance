@@ -13,7 +13,6 @@ import {
 
 const PlacesPage = () => {
   const { action } = useParams()
-  console.log(action)
   const [title, setTitle] = useState('')
   const [address, setAddress] = useState('')
   const [addedPhotos, setAddedPhotos] = useState([])

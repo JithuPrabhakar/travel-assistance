@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { differenceInCalendarDays } from 'date-fns'
+import { useBookHotelMutation } from '../slices/hotelApiSlice'
+import { Navigate } from 'react-router-dom'
 
 const BookingWidget = ({ data }) => {
   const [checkIn, setCheckIn] = useState('')
@@ -7,6 +9,12 @@ const BookingWidget = ({ data }) => {
   const [numberOfGuests, setNumberOfGuests] = useState(1)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [cab, setCab] = useState(false)
+  const [redirect, setRedirect] = useState('')
+
+  const [bookHotel] = useBookHotelMutation()
+
+  const { userInfo } = JSON.parse(localStorage.getItem('userInfo'))
 
   let numberOfNights = 0
   if (checkIn && checkOut) {
@@ -14,6 +22,37 @@ const BookingWidget = ({ data }) => {
       new Date(checkOut),
       new Date(checkIn)
     )
+  }
+
+  let amount = 0
+  if (numberOfNights > 0) {
+    if (cab) {
+      amount = (data.price + 500) * numberOfNights
+    } else {
+      amount = data.price * numberOfNights
+    }
+  }
+
+  async function bookThisPlace() {
+    const bookingData = {
+      checkIn,
+      checkOut,
+      numberOfGuests,
+      name,
+      phone,
+      cab,
+      price: amount,
+      place: data._id,
+      user: userInfo._id,
+    }
+    const response = await bookHotel(bookingData)
+    console.log(response.data)
+    console.log(response.data._id)
+    setRedirect(`/account/bookings/${response.data._id}`)
+  }
+
+  if (redirect) {
+    return <Navigate to={redirect} />
   }
 
   return (
@@ -48,6 +87,13 @@ const BookingWidget = ({ data }) => {
             onChange={(ev) => setNumberOfGuests(ev.target.value)}
           />
         </div>
+        <div className='py-3 px-4 border-t flex items-center gap-2'>
+          <input type='checkbox' checked={cab} onChange={() => setCab(!cab)} />
+          <label>Cab service - Rs. 500/day</label>
+        </div>
+        <p className='text-xs flex justify-center mb-2'>
+          (for 10kms and Rs.10/extra km-can pay after the trip/day)
+        </p>
         {numberOfNights > 0 && (
           <div className='py-3 px-4 border-t'>
             <label>Your full name:</label>
@@ -64,12 +110,10 @@ const BookingWidget = ({ data }) => {
             />
           </div>
         )}
-        <button className='primary'>
+        <button onClick={bookThisPlace} className='primary mt-4'>
           Book this place
           {numberOfNights > 0 && (
-            <div className='py-3 px-4 border-t'>
-              Rs. {numberOfNights * data.price}
-            </div>
+            <div className='py-3 px-4 border-t'>Rs. {amount}</div>
           )}
         </button>
       </div>

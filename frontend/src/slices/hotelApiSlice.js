@@ -43,6 +43,18 @@ export const hotelApiSlice = apiSlice.injectEndpoints({
         url: `/api/places/${id}`,
       }),
     }),
+    bookHotel: builder.mutation({
+      query: (data) => ({
+        url: `/api/bookings`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getBookedHotels: builder.query({
+      query: () => ({
+        url: `/api/bookings`,
+      }),
+    }),
   }),
 })
 
@@ -53,4 +65,6 @@ export const {
   useGetHotelsQuery,
   useGetHotelByIdQuery,
   useGetAllHotelsQuery,
+  useBookHotelMutation,
+  useGetBookedHotelsQuery,
 } = hotelApiSlice
