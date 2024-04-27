@@ -48,7 +48,7 @@ const BookingWidget = ({ data }) => {
     const response = await bookHotel(bookingData)
     console.log(response.data)
     console.log(response.data._id)
-    setRedirect(`/account/bookings/${response.data._id}`)
+    setRedirect('/account/bookings/')
   }
 
   if (redirect) {

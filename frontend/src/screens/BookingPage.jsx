@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom'
 
-const BookingPage = ({ place }) => {
+const BookingPage = ({ booking }) => {
   const { action } = useParams()
-  console.log(place)
+  console.log(booking)
   return (
     <div>
       <h2>Booked Place</h2>

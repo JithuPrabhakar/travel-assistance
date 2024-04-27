@@ -1,6 +1,8 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import BookingPage from './BookingPage'
 import { useGetBookedHotelsQuery } from '../slices/hotelApiSlice'
+import PlaceImage from '../components/PlaceImage'
+import { differenceInCalendarDays, format } from 'date-fns'
 
 const BookingsPage = () => {
   const { action } = useParams()
@@ -20,14 +22,36 @@ const BookingsPage = () => {
   return (
     <div>
       {action ? (
-        <BookingPage place={place} />
+        <BookingPage booking={place} />
       ) : (
-        <div>
+        <div className='flex gap-4 flex-col'>
           {myBookings.length > 0 &&
             myBookings.map((booking) => (
-              <div key={`${booking._id}-container`}>
-                <h2 className='text-center mt-5'>Your bookings: </h2>
-                <p>{booking.title}</p>
+              <div
+                // to={`/account/bookings/${booking._id}`}
+                key={booking._id}
+                className='flex gap-4 bg-gray-200 rounded-2xl overflow-hidden'
+              >
+                <div className='w-48'>
+                  <PlaceImage place={booking.place} />
+                </div>
+                <div className='py-3 pr-3 grow'>
+                  <h2 className='text-xl'>{booking.place.title}</h2>
+                  <div className='border-t border-gray-300 text-gray-500 text-sm'>
+                    {format(new Date(booking.checkIn), 'yyyy-MM-dd')} &rarr;{' '}
+                    {format(new Date(booking.checkOut), 'yyyy-MM-dd')}
+                  </div>
+                  <div className='text-xl'>
+                    Number of Nights:{' '}
+                    {differenceInCalendarDays(
+                      new Date(booking.checkOut),
+                      new Date(booking.checkIn)
+                    )}
+                    {' | '}
+                    Total amount: Rs.
+                    {booking.price}
+                  </div>
+                </div>
               </div>
             ))}
         </div>
