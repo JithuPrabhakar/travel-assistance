@@ -93,6 +93,7 @@ const PlacesPage = () => {
       checkOut,
       maxGuests,
       owner: userInfo._id,
+      price,
     }
     const response = await saveHotel(data)
     console.log(response)

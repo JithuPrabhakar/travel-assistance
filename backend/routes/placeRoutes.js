@@ -15,10 +15,15 @@ router.get('/', async (req, res) => {
   }
 })
 
-// router.get('/:id', async (req, res) => {
-//   const { id } = req.params
-//   res.json(await Place.findById(id))
-// })
+router.get('/all', async (req, res) => {
+  const places = await Place.find()
+  res.json(places)
+})
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params
+  res.json(await Place.findById({ _id: id }))
+})
 
 router.post('/', protect, async (req, res) => {
   try {
@@ -33,6 +38,7 @@ router.post('/', protect, async (req, res) => {
       checkOut,
       maxGuests,
       owner,
+      price,
     } = req.body
     const place = await Place.create({
       title,
@@ -45,6 +51,7 @@ router.post('/', protect, async (req, res) => {
       checkOut,
       maxGuests,
       owner,
+      price,
     })
     res.status(201).json(place)
   } catch (error) {
