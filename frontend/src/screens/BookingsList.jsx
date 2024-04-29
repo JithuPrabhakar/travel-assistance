@@ -4,12 +4,13 @@ import {
 } from '../slices/hotelApiSlice'
 
 const BookingsList = () => {
-  const { data, isLoading, error } = useGetAllBookingsQuery()
+  const { data, isLoading, error, refetch } = useGetAllBookingsQuery()
   const [deleteBooking] = useDeleteBookingMutation()
 
   const onDelete = async (userId) => {
     try {
       const booking = deleteBooking(userId)
+      refetch()
       console.log(booking)
     } catch (error) {
       console.error('Error deleting user:', error)

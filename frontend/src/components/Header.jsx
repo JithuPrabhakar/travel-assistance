@@ -14,6 +14,10 @@ export const Header = () => {
         <span className='font-bold text-xl text-primary'>Travel Assistant</span>
       </Link>
 
+      <Link to={'/contact'} className='text-primary font-semibold'>
+        Contact Admin
+      </Link>
+
       <div className='flex items-center border-gray-300 rounded-full gap-2 py-2 px-4 shadow-md shadow-gray-300'>
         <div>Anywhere</div>
         <div className='border-l border-gray-300'></div>

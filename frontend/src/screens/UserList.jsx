@@ -1,12 +1,14 @@
 import { useAllUsersQuery, useDeleteUserMutation } from '../slices/userApiSlice'
 
 const UserList = () => {
-  const { data, isLoading, error } = useAllUsersQuery()
+  const { data, isLoading, error, refetch } = useAllUsersQuery()
   const [deleteUser] = useDeleteUserMutation()
 
   const onDelete = async (userId) => {
     try {
-      const users = deleteUser(userId)
+      const user = deleteUser(userId)
+      refetch()
+      console.log(user)
     } catch (error) {
       console.error('Error deleting user:', error)
     }

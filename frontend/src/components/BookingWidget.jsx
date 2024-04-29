@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { differenceInCalendarDays } from 'date-fns'
 import { useBookHotelMutation } from '../slices/hotelApiSlice'
 import { Navigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const BookingWidget = ({ data }) => {
   const [checkIn, setCheckIn] = useState('')
@@ -14,7 +15,8 @@ const BookingWidget = ({ data }) => {
 
   const [bookHotel] = useBookHotelMutation()
 
-  const { userInfo } = JSON.parse(localStorage.getItem('userInfo'))
+  // const { userInfo } = JSON.parse(localStorage.getItem('userInfo'))
+  const { userInfo } = useSelector((state) => state.auth)
 
   let numberOfNights = 0
   if (checkIn && checkOut) {

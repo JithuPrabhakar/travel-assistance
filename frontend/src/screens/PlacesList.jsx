@@ -4,13 +4,14 @@ import {
 } from '../slices/hotelApiSlice'
 
 const PlacesList = () => {
-  const { data, isLoading, error } = useGetAllHotelsQuery()
-  console.log({ data, isLoading, error })
+  const { data, isLoading, error, refetch } = useGetAllHotelsQuery()
   const [deleteHotel] = useDeleteHotelMutation()
 
   const onDelete = async (userId) => {
     try {
       const hotel = deleteHotel(userId)
+      refetch()
+      console.log(hotel)
     } catch (error) {
       console.error('Error deleting user:', error)
     }
