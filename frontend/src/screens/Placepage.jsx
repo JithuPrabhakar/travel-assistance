@@ -33,7 +33,7 @@ const Placepage = () => {
   }
 
   return (
-    <div className='mt-4 bg-gray-100 px-8 pt-8 w-full mx-auto'>
+    <div className='mt-4 bg-gray-100 px-8 pt-8 w-[60%] mx-auto'>
       {!isLoading && data && (
         <div>
           <h1 className='text-3xl'>{data.title}</h1>
