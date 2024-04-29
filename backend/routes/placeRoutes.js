@@ -25,6 +25,11 @@ router.get('/:id', async (req, res) => {
   res.json(await Place.findById({ _id: id }))
 })
 
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
+  res.json(await Place.findByIdAndDelete({ _id: id }))
+})
+
 router.post('/', protect, async (req, res) => {
   try {
     const {

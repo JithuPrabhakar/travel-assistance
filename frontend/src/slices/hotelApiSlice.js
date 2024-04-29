@@ -43,6 +43,12 @@ export const hotelApiSlice = apiSlice.injectEndpoints({
         url: `/api/places/${id}`,
       }),
     }),
+    deleteHotel: builder.mutation({
+      query: (id) => ({
+        url: `/api/places/${id}`,
+        method: 'DELETE',
+      }),
+    }),
     bookHotel: builder.mutation({
       query: (data) => ({
         url: `/api/bookings`,
@@ -50,9 +56,20 @@ export const hotelApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    deleteBooking: builder.mutation({
+      query: (id) => ({
+        url: `/api/bookings/${id}`,
+        method: 'DELETE',
+      }),
+    }),
     getBookedHotels: builder.query({
       query: () => ({
         url: `/api/bookings`,
+      }),
+    }),
+    getAllBookings: builder.query({
+      query: () => ({
+        url: `/api/bookings/all`,
       }),
     }),
   }),
@@ -67,4 +84,7 @@ export const {
   useGetAllHotelsQuery,
   useBookHotelMutation,
   useGetBookedHotelsQuery,
+  useGetAllBookingsQuery,
+  useDeleteBookingMutation,
+  useDeleteHotelMutation,
 } = hotelApiSlice

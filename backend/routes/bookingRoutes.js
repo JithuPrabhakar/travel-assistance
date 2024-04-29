@@ -47,4 +47,27 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/all', async (req, res) => {
+  try {
+    let bookings = await Booking.find()
+    if (!bookings || bookings.length === 0) {
+      return res.status(404).json({ message: 'No bookings found.' })
+    } else {
+      res.json(bookings)
+    }
+  } catch (err) {
+    console.error(err)
+  }
+})
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    let booking = await Booking.findByIdAndDelete(id)
+    res.status(404).json({ message: 'No bookings found.' })
+  } catch (err) {
+    console.error(err)
+  }
+})
+
 export default router
